@@ -26,7 +26,7 @@ class JwtCookieUpserter {
     if (jwtCookie == null || jwtCookie.value.isNullOrEmpty()) {
       val newJwt: String = "jwt-value"
       jwtCookie = NewCookie("jwt", newJwt, RESOURCE_PATH, null, null, 600, false)
-      requestContext?.headers?.add(HttpHeaders.COOKIE, jwtCookie.toString()) // this no longer seems to have any effect in ApiResource
+      // requestContext?.headers?.add(HttpHeaders.COOKIE, jwtCookie.toString()) // this no longer seems to have any effect in ApiResource
       requestContext?.setProperty("set-jwt", jwtCookie)
     }
     requestContext?.setProperty("jwt", jwtCookie)
@@ -62,8 +62,8 @@ class ApiResource {
   fun getJwt(
     @RestCookie("jwt") jwt: String? // This still seems necessary for the Endpoint to take in the User-Agent's Cookie Value if they provide it in the Request
   ): Response {
-    // val jwtCookieValue = getJwtCookieValueFromRequestContext()
-    return Response.ok(jwt, MediaType.TEXT_PLAIN).build()
+    val jwtCookieValue = getJwtCookieValueFromRequestContext()
+    return Response.ok(jwtCookieValue, MediaType.TEXT_PLAIN).build()
   }
 
   // ... other Resource Endpoints ...
